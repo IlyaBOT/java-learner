@@ -8,6 +8,7 @@
 | Windows 7 | Исторический JDK 8 для нужной архитектуры | Старая совместимая IDE или редактор + cmd | Нынешние JDK и IDE на Win7 не рассчитаны |
 | Windows XP | Исторический JDK 6 x86 | Редактор + cmd, запуск из `bin` при необходимости | Глава 0–5 по синтаксису, CI работает на современной ОС |
 | Linux x86_64 | JDK 21 из пакетов дистрибутива или Temurin 25 | Терминал, IntelliJ Community или редактор | Пакеты отличаются между дистрибутивами |
+| Mac OS X 10.5.8 Leopard Intel | Apple Java после Update 10; на 64-битном Intel проверь Java 6 и `javac` | Terminal + редактор/Xcode своего времени | На конкретной машине может быть только более старая Java |
 | Mac OS X 10.6 Intel | Apple Java 6 (обновление Apple) | Terminal, редактор/Xcode эпохи системы | Только базовые главы 0–5; остальное собирать на новой JVM |
 | Mac OS X 10.7.3+ Intel | Исторический Oracle JDK 7 | Terminal + совместимая редакция IDE | JDK 7 не содержит Stream API |
 | OS X 10.8+ Intel | Исторический JDK 8, проверенный под точную версию OS X | Terminal + совместимая редакция IDE | Свежие Temurin 8 для старой ОС уже не подходят |
@@ -42,7 +43,7 @@ java -cp work/ch00 HelloEnvironment
 
 ## Выбор старого JDK
 
-- Apple: [Java for Mac OS X 10.6 Update 17](https://support.apple.com/en-ca/106567). Проверяй **обе** команды: `java` и `javac`.
+- Apple: [Java for Mac OS X 10.5 Update 10](https://support.apple.com/en-ie/104178) и [Java for Mac OS X 10.6 Update 17](https://support.apple.com/en-ca/106567). Проверяй **обе** команды: `java` и `javac`.
 - Oracle: [JDK 7 на Mac OS X требует 10.7.3+](https://docs.oracle.com/javase/7/docs/webnotes/install/mac/mac-jdk.html). [Java 8 на Mac](https://docs.oracle.com/javase/8/docs/technotes/guides/install/mac_jdk.html). Совместимость отдельного обновления может меняться.
 - [Исторические системные требования JDK 7 на Windows](https://docs.oracle.com/javase/7/docs/webnotes/install/windows/windows-system-requirements.html) и [историческая документация IntelliJ IDEA 2016.2](https://resources.jetbrains.com/storage/products/help/data/idea/2016.2/intellij-idea-help.pdf). Для XP лучше простой редактор и подходящий JDK 6, без угадывания, запустится ли IDE.
 - [Temurin: установка](https://adoptium.net/installation), [поддерживаемые платформы](https://adoptium.net/supported-platforms/), [разъяснение о прекращении поддержки старых macOS в свежем Temurin 8](https://adoptium.net/news/2026/02/eclipse-temurin-8u482-11030-17018-21010-2502-available).

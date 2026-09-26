@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Java / лаборатория — текстовая версия</title>
+<style>
+body{font:16px/1.55 Arial,Helvetica,sans-serif;background:#f3f1eb;color:#212e33;margin:0;padding:0}
+.page{max-width:850px;margin:0 auto;background:#fff;min-height:100%;padding:28px 40px 80px}
+h1,h2,h3{line-height:1.25}h1{font-size:34px}h2{font-size:27px;border-bottom:2px solid #dfa36c;padding-bottom:9px;margin-top:45px}h3{margin-top:26px}
+a{color:#206c61}a:hover{text-decoration:none}p,li{margin:10px 0}ul,ol{padding-left:27px}
+pre{background:#15222a;color:#d8f5e5;padding:16px;overflow:auto;font:14px/1.5 Consolas,Menlo,monospace}
+code{font-family:Consolas,Menlo,monospace;background:#e8eeeb;padding:2px 3px}pre code{background:none;color:inherit;padding:0}
+.note{background:#fff2dc;border-left:4px solid #d89652;padding:13px;margin:20px 0}.chapter{page-break-before:always}.task{border:1px solid #d4ddd8;padding:14px;margin:15px 0}
+.exam{background:#edf4f0;padding:18px;margin:20px 0}.answers{border-top:1px solid #9ab6a6;margin-top:22px;padding-top:10px}
+@media print{body{background:white}.page{padding:0}.task,.exam,pre{page-break-inside:avoid}a{text-decoration:none;color:#212e33}}
+</style></head><body><div class="page"><h1 id="top">Java / лаборатория</h1>
+<p>Текстовая и офлайн-версия полного курса. Её можно открыть через <code>file://</code> без JavaScript даже в старом браузере. Для автоматической проверки экзаменов и сохранения черновиков используй <a href="index.html">интерактивный сайт</a> на современном устройстве. Основные решения пиши в <a href="https://github.com/IlyaBOT/java-learner">репозитории</a>.</p>
+<p class="note"><strong>Маршрут:</strong> прочитай теорию → сделай три упражнения → ответь на четыре вопроса без подсказок → сверь ключ (проходной результат 3/4) → проверь готовый Java-файл через <code>scripts/check.sh</code> или GitHub Actions.</p>
+<h2>Содержание</h2><ol><li><a href="#ch00">00 · Рабочее место</a> — От установки JDK до первой программы без магии кнопки Run.</li><li><a href="#ch01">01 · Как Java исполняется</a> — Исходник, байткод, main, аргументы и диагностика.</li><li><a href="#ch02">02 · Данные и ветвления</a> — Типы, арифметика, сравнение и управляющие конструкции.</li><li><a href="#ch03">03 · Методы и массивы</a> — Делим код на части и работаем с последовательностями.</li><li><a href="#ch04">04 · Объекты и инварианты</a> — Классы, конструкторы, поля, инкапсуляция.</li><li><a href="#ch05">05 · Коллекции и generics</a> — List, Map, множество и параметризованные типы.</li><li><a href="#ch06">06 · Ошибки и файлы</a> — Исключения, ресурсы, кодировки и ввод-вывод.</li><li><a href="#ch07">07 · Сборка и тесты</a> — Структура проекта, Maven, проверка поведения и CI.</li><li><a href="#ch08">08 · Функции и Stream API</a> — Лямбды, map, filter, distinct и порядок операций.</li><li><a href="#ch09">09 · Потоки и задачи</a> — Разделение работы, гонки данных и завершение ExecutorService.</li><li><a href="#ch10">10 · HTTP и данные</a> — URL, кодирование параметров и граница между строкой и протоколом.</li><li><a href="#ch11">11 · Финальный проект</a> — Консольный список задач с файлами, тестами и Git-историей.</li></ol>
+<h2>Установка Java и среды разработки</h2><p>Выбери свою платформу. Команды проверки показаны внутри каждого раздела; <code>java</code> и <code>javac</code> должны находиться и иметь согласованные версии. Подробная таблица и источники есть в <a href="https://github.com/IlyaBOT/java-learner/blob/main/SETUP.md">SETUP.md</a>.</p>
+<h3>Windows 10 / 11 · основной маршрут</h3><ol><li>Установи <a href="https://adoptium.net/temurin/releases/?version=25">Temurin JDK 25 LTS</a> для Windows x64. Через PowerShell можно: <code>winget install EclipseAdoptium.Temurin.25.JDK</code>. После установки открой новый терминал.</li><li>Поставь <a href="https://www.jetbrains.com/idea/download/">IntelliJ IDEA Community</a> (бесплатная версия), создай <em>New Project → Java</em>, выбери установленный JDK. JDK внутри самой IDE для запуска IDE не заменяет project SDK.</li><li>Проверь в PowerShell <code>java -version</code>, <code>javac -version</code>, <code>where.exe java</code>. Если версии разные, исправь <code>PATH</code> и <code>JAVA_HOME</code>, открой новый терминал.</li></ol><pre><code>javac -encoding UTF-8 Hello.java
+java Hello</code></pre><p>Для работ из репозитория: <code>git clone https://github.com/IlyaBOT/java-learner.git</code>, затем в PowerShell <code>bash scripts/check.sh</code> через Git Bash или используй <code>pwsh -File scripts/check.ps1</code>.</p>
+<h3>Windows XP / 7 · историческая ветка</h3><ol><li><strong>XP:</strong> бери исторический JDK 6 для своей архитектуры из доверенного архива правообладателя. Современный Temurin здесь не предназначен для запуска. Начни с <code>javac</code> и <code>java</code> в cmd.exe, редактором может быть обычный текстовый редактор с сохранением в UTF-8.</li><li><strong>Windows 7:</strong> исторический JDK 8 x86/x64 и подходящая старая версия IDE возможны, но совместимость проверяй для <em>конкретного билда</em>. Если IDE тяжела, используй редактор + cmd.exe. Новые релизы IDE и JDK не обещают поддержку Windows 7.</li><li>Добавь папку <code>bin</code> конкретного JDK в <code>PATH</code>. Проверь <code>where java</code>, <code>java -version</code>, <code>javac -version</code>.</li></ol><pre><code>javac -encoding UTF-8 Hello.java
+java Hello</code></pre><p>На XP русская консоль может испортить вывод; для первых лабораторных выбран ASCII. Главы 0–5 намеренно обходятся без новых конструкций, но CI компилирует их под Java 8, поэтому запуск на JDK 6 всё равно нужно отдельно проверить. Старую Java не используй для просмотра непроверенных сайтов или запуска чужих JAR.</p>
+<h3>Linux · пакеты и терминал</h3><ol><li>Установи JDK из репозитория дистрибутива: например, для Debian/Ubuntu при наличии пакета <code>sudo apt update &amp;&amp; sudo apt install openjdk-21-jdk git</code>; для Arch <code>sudo pacman -S jdk21-openjdk git</code>. Или возьми актуальный Temurin 25 для своей архитектуры.</li><li>Проверь <code>java -version</code>, <code>javac -version</code>, <code>readlink -f "$(command -v javac)"</code>. При нескольких JDK переключай их средствами дистрибутива и проверяй обе команды.</li><li>Выбери IntelliJ IDEA Community либо VS Code с Java Extension Pack. Открой корень этого репозитория, а не папку отдельного класса.</li></ol><pre><code>git clone https://github.com/IlyaBOT/java-learner.git
+cd java-learner
+bash scripts/check.sh</code></pre><p>Если пакет <code>openjdk-21-jdk</code> отсутствует, проверь версию дистрибутива и список его пакетов, не добавляй случайные сторонние репозитории.</p>
+<h3>Mac OS X Intel · Leopard / Snow Leopard / Lion</h3><ol><li><strong>10.5.8 Leopard:</strong> обнови системную Java через Apple Software Update (существует <a href="https://support.apple.com/en-ie/104178">Java for Mac OS X 10.5 Update 10</a>). На 64-битном Intel проверь наличие Java 6 и <code>javac</code>; на конкретной машине доступная версия может быть другой. Oracle JDK 7 требует минимум 10.7.3.</li><li><strong>10.6 Snow Leopard:</strong> используй Apple Java 6 и установи доступное <a href="https://support.apple.com/en-ca/106567">Java for Mac OS X 10.6 Update 17</a>. Проверь <code>java -version</code> и <code>javac -version</code> в Terminal. Установка только JRE без компилятора для упражнений не подходит.</li><li><strong>10.7.3+ Lion:</strong> Oracle JDK 7 выпускался для Intel Mac с 10.7.3; для 10.8+ выпускался JDK 8. Подбирай <em>исторический совместимый установщик</em> и проверяй требования именно выбранного обновления, а не сегодняшнего JDK с тем же номером версии.</li><li>На 10.5/10.6 начни с Terminal и текстового редактора/Xcode того времени; современные IntelliJ IDEA и VS Code на этих системах не запускаются. На новом компьютере можно редактировать тот же Git-репозиторий.</li></ol><pre><code>/usr/libexec/java_home -V
+java -version
+javac -version
+javac -encoding UTF-8 Hello.java &amp;&amp; java Hello</code></pre><p>Главы 0–5 — разумный маршрут для Apple Java 6; при Java 5 возможны отличия даже в базовых API. Java 7 добавляет try-with-resources, Java 8 — лямбды и Stream API. Работы старше установленной Java можно отправлять в GitHub и проверять CI.</p>
+<h3>macOS Apple Silicon · M-серия</h3><ol><li>Скачай <a href="https://adoptium.net/temurin/releases/?version=25&amp;os=mac&amp;arch=aarch64">Temurin JDK 25 LTS для macOS aarch64</a> и установи PKG. Вариант JDK 21 LTS тоже подходит для этого курса.</li><li>В Terminal проверь <code>/usr/libexec/java_home -V</code>, <code>java -version</code>, <code>javac -version</code>. При нескольких версиях выбери одну явно: <code>export JAVA_HOME=$(/usr/libexec/java_home -v 25)</code>, затем <code>export PATH="$JAVA_HOME/bin:$PATH"</code>.</li><li>Установи IntelliJ IDEA Community для Apple Silicon, открой репозиторий и выбери project SDK.</li></ol><pre><code>git clone https://github.com/IlyaBOT/java-learner.git
+cd java-learner
+bash scripts/check.sh</code></pre><p>Старые примеры собираются и на новой Java; если компилируешь приложение именно для старой JVM, задай целевой API через <code>javac --release 8</code> (поддерживаемый диапазон зависит от версии JDK).</p>
+<div class="chapter" id="ch00"><h2>00 · Рабочее место</h2><p>От установки JDK до первой программы без магии кнопки Run. Время: 35 мин.</p>
+<h3>Цели</h3><ul><li>Отличать JDK, JVM и IDE</li><li>Проверять PATH и версию компилятора</li><li>Собрать и запустить класс вручную</li></ul>
+<h3>Урок 1. Три разных роли</h3><p><strong>JDK</strong> содержит инструменты разработки, включая <code>javac</code>. <strong>JVM</strong> исполняет байткод из файлов <code>.class</code>. <strong>IDE</strong> редактирует исходники и запускает инструменты, но не заменяет выбор JDK для проекта.</p><pre><code>Hello.java  →  javac  →  Hello.class  →  java / JVM  →  вывод</code></pre><p>Имя публичного класса и файла должны совпадать: <code>public class Hello</code> хранится в <code>Hello.java</code>. Компиляция и запуск — два отдельных шага. Ошибка <code>'javac' is not recognized</code> означает проблему с установленным JDK или <code>PATH</code>, а не с исходным кодом.</p>
+<h3>Урок 2. Первый запуск и диагностика</h3><p>Создай файл <code>Hello.java</code> в пустой папке. На Windows используй PowerShell/cmd, на Unix — Terminal. Запусти команды из той же папки, где лежит файл.</p><pre><code>public class Hello {
+    public static void main(String[] args) {
+        System.out.println("JAVA_READY");
+    }
+}</code></pre><pre><code>javac Hello.java
+java Hello</code></pre><p><code>java Hello</code> принимает <em>имя класса</em>, а не <code>Hello.class</code>. Если версия языка в IDE отличается от терминала, проверь project SDK, <code>PATH</code> и <code>JAVA_HOME</code>. Напиши <code>java -version</code> и <code>javac -version</code> в заметках к занятию.</p>
+<h3>Практика</h3><div class="task"><strong>1. Диагностическая карточка · Легко</strong><p>Выпиши версии java и javac, путь до javac и ОС. Объясни, где возникает ошибка при несовпадении версий.</p><p><em>Подсказка:</em> Версии компилятора и среды выполнения проверяются разными командами.</p><pre><code>java -version
+javac -version
+# Windows: where java / where javac
+# Unix: command -v java; command -v javac</code></pre></div>
+<div class="task"><strong>2. Первый класс в репозитории · Средне</strong><p>Открой work/ch00/HelloEnvironment.java. Напечатай ровно JAVA_READY и убери TODO. Запусти скрипт проверки.</p><p>Файл: <code>work/ch00/HelloEnvironment.java</code></p><p><em>Подсказка:</em> Печатай ASCII: так легче сверить вывод даже в cmd на XP.</p><pre><code>public class HelloEnvironment {
+    public static void main(String[] args) {
+        // твой код
+    }
+}</code></pre></div>
+<div class="task"><strong>3. Сломай сборку осознанно · Сложно</strong><p>Переименуй временную копию файла, оставив public class прежним. Зафиксируй текст ошибки; верни файл на место и объясни причину.</p><p><em>Подсказка:</em> Исходный файл с public class обязан называться так же, как класс.</p><pre><code>// Запиши здесь свою ошибку и исправление.</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. Что входит в JDK?</strong></p><ol type="A"><li>Только редактор</li><li>Компилятор и инструменты разработки</li><li>Только JVM в браузере</li></ol>
+<p><strong>2. Как запустить скомпилированный класс Hello из текущей папки?</strong></p><ol type="A"><li>java Hello.class</li><li>javac Hello</li><li>java Hello</li></ol>
+<p><strong>3. IDE запускается, но javac в терминале не найден. Куда смотреть сначала?</strong></p><ol type="A"><li>PATH и установку JDK</li><li>Тип переменной main</li><li>Размер файла .class</li></ol>
+<p><strong>4. Файл содержит public class Hello. Как он называется?</strong></p><ol type="A"><li>hello.class</li><li>Hello.java</li><li>Main.java</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>B. JDK нужен для javac и других инструментов.</li><li>C. Команде java передают имя класса без расширения.</li><li>A. IDE может работать на собственной runtime; в терминале нужен доступный JDK.</li><li>B. Имя публичного класса и имя исходного файла совпадают.</li></ol></div></div>
+<p><a href="#ch01">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<div class="chapter" id="ch01"><h2>01 · Как Java исполняется</h2><p>Исходник, байткод, main, аргументы и диагностика. Время: 40 мин.</p>
+<h3>Цели</h3><ul><li>Найти точку входа</li><li>Передать аргументы из терминала</li><li>Различать ошибки компиляции и выполнения</li></ul>
+<h3>Урок 1. Метод main и аргументы</h3><p>JVM начинает обычную консольную программу с <code>public static void main(String[] args)</code>. Массив <code>args</code> содержит строки после имени класса. При вызове <code>java Echo one two</code> в нём две строки: <code>"one"</code> и <code>"two"</code>.</p><pre><code>public class Echo {
+    public static void main(String[] args) {
+        System.out.println(args.length);
+        if (args.length &gt; 0) {
+            System.out.println(args[0]);
+        }
+    }
+}</code></pre><p>Обращаться к <code>args[0]</code> без проверки длины опасно: получишь <code>ArrayIndexOutOfBoundsException</code> во время выполнения.</p>
+<h3>Урок 2. Что именно ломается</h3><p>Синтаксическая ошибка, например пропущенная <code>;</code>, остановит <code>javac</code>: новой версии <code>.class</code> не будет. Ошибка выполнения случается после старта JVM: массив вышел за границы, число не удалось разобрать, файл отсутствует.</p><p>Старый <code>.class</code> может остаться после неудачной компиляции. Удаляй его при диагностике, а затем запускай команды снова. <code>java -cp . Echo</code> задаёт classpath текущей папкой явно. В IDE сначала посмотри команду запуска и рабочую директорию.</p>
+<h3>Практика</h3><div class="task"><strong>1. Аргументы на ладони · Легко</strong><p>Напиши класс, печатающий число аргументов и первый аргумент при его наличии. Проверь пустой и непустой запуск.</p><p><em>Подсказка:</em> Проверяй args.length до args[0].</p><pre><code>java Echo
+java Echo alpha beta</code></pre></div>
+<div class="task"><strong>2. Карточка среды · Средне</strong><p>В work/ch01/RuntimeCard.java реализуй main: две строки с префиксами JAVA= и OS=, значения возьми из системных свойств. Удали TODO.</p><p>Файл: <code>work/ch01/RuntimeCard.java</code></p><p><em>Подсказка:</em> Не зашивай значения из своего компьютера в исходник.</p><pre><code>System.getProperty(&quot;java.version&quot;)
+System.getProperty(&quot;os.name&quot;)</code></pre></div>
+<div class="task"><strong>3. Поймай старый class · Сложно</strong><p>Скомпилируй класс, затем внеси синтаксическую ошибку и снова вызови javac. Объясни, почему после ошибки java иногда запускает старую версию.</p><p><em>Подсказка:</em> Сравни время изменения .java и .class.</p><pre><code>// Запиши команды, наблюдение и исправление.</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. Что окажется в args[1] при java Echo one two?</strong></p><ol type="A"><li>one</li><li>two</li><li>Echo</li></ol>
+<p><strong>2. Когда обнаруживается пропущенная ;?</strong></p><ol type="A"><li>Во время компиляции</li><li>После запуска JVM</li><li>Во время git push</li></ol>
+<p><strong>3. Что произойдёт с args[0], если аргументов нет?</strong></p><ol type="A"><li>Вернётся null</li><li>Будет исключение выхода за границы</li><li>Напечатается пустая строка</li></ol>
+<p><strong>4. Зачем нужен -cp . при запуске?</strong></p><ol type="A"><li>Указать classpath текущей папкой</li><li>Включить режим компиляции</li><li>Изменить кодировку</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>B. args[0] = one, args[1] = two.</li><li>A. javac разбирает синтаксис до исполнения.</li><li>B. Длина args равна нулю.</li><li>A. Classpath задаёт места поиска классов.</li></ol></div></div>
+<p><a href="#ch02">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<div class="chapter" id="ch02"><h2>02 · Данные и ветвления</h2><p>Типы, арифметика, сравнение и управляющие конструкции. Время: 55 мин.</p>
+<h3>Цели</h3><ul><li>Выбрать примитивный тип</li><li>Разобрать if/else и цикл</li><li>Учесть границы и целочисленное деление</li></ul>
+<h3>Урок 1. Значения, ссылки и операции</h3><p><code>int</code> хранит целые числа, <code>double</code> — числа с плавающей точкой, <code>boolean</code> — истину/ложь, <code>char</code> — символ. <code>String</code> — объект. Выражение <code>5 / 2</code> даёт <code>2</code>, потому что оба операнда целые; <code>5.0 / 2</code> даёт <code>2.5</code>.</p><pre><code>int age = 18;
+boolean adult = age &gt;= 18;
+String name = "Ilya";
+System.out.println(name + ": " + adult);</code></pre><p>Для содержимого строк используй <code>a.equals(b)</code>, а <code>==</code> проверяет, указывают ли ссылки на один объект. <code>null</code> не является пустой строкой.</p>
+<h3>Урок 2. Условия и циклы</h3><p><code>if/else if/else</code> выбирает одну ветку. Порядок условий имеет значение: сначала специальные случаи, затем общие. Цикл <code>for</code> удобен, когда число итераций известно; <code>while</code> — когда известно условие окончания.</p><pre><code>for (int i = 0; i &lt; 3; i++) {
+    if (i % 2 == 0) {
+        System.out.println(i);
+    }
+}</code></pre><p>Проверь граничные значения: 0, переходы между диапазонами, отрицательные входы. Ошибки на границе <code>&lt;</code> и <code>&lt;=</code> чаще ошибок внутри диапазона.</p>
+<h3>Практика</h3><div class="task"><strong>1. Деление без сюрприза · Легко</strong><p>Выведи результат 5 / 2 и 5.0 / 2; объясни разницу и типы операндов.</p><p><em>Подсказка:</em> Для второго случая один операнд double.</p><pre><code>System.out.println(5 / 2);
+System.out.println(5.0 / 2);</code></pre></div>
+<div class="task"><strong>2. Стоимость билета · Средне</strong><p>В work/ch02/TicketPrice.java реализуй static int price(int age, boolean student): возраст &lt; 0 → -1; &lt; 7 → 0; 7–17 → 50; взрослый студент → 80; остальные → 100. Удали TODO.</p><p>Файл: <code>work/ch02/TicketPrice.java</code></p><p><em>Подсказка:</em> Проверь возраст -1, 0, 6, 7, 17, 18.</p><pre><code>public static int price(int age, boolean student) {
+    // твои ветки
+}</code></pre></div>
+<div class="task"><strong>3. Таблица границ · Сложно</strong><p>Составь таблицу ожидаемых цен для возрастов -1, 0, 6, 7, 17, 18, 120 и двух значений student. Объясни, какие входы игнорируют флаг студента.</p><p><em>Подсказка:</em> Сначала разбей возраст на диапазоны, затем учти флаг.</p><pre><code>// Таблица или заметки здесь.</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. Что вычислит 5 / 2 в Java?</strong></p><ol type="A"><li>2</li><li>2.5</li><li>Ошибка</li></ol>
+<p><strong>2. Как сравнить содержимое двух String?</strong></p><ol type="A"><li>a == b</li><li>a.equals(b)</li><li>a = b</li></ol>
+<p><strong>3. Сколько раз выполнится for (int i=0; i&lt;3; i++)?</strong></p><ol type="A"><li>2</li><li>3</li><li>4</li></ol>
+<p><strong>4. Что особенно важно для проверки диапазона 7–17?</strong></p><ol type="A"><li>7 и 17</li><li>Только 12</li><li>Цвет консоли</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>A. Оба операнда int, дробная часть отбрасывается.</li><li>B. equals сравнивает значение строк.</li><li>B. Значения i: 0, 1 и 2.</li><li>A. Границы диапазона ловят ошибку &lt; вместо &lt;=.</li></ol></div></div>
+<p><a href="#ch03">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<div class="chapter" id="ch03"><h2>03 · Методы и массивы</h2><p>Делим код на части и работаем с последовательностями. Время: 55 мин.</p>
+<h3>Цели</h3><ul><li>Написать метод с параметрами</li><li>Итерироваться по массиву</li><li>Определить поведение пустого входа</li></ul>
+<h3>Урок 1. Метод как контракт</h3><p>Метод принимает параметры, делает одну понятную работу и возвращает значение либо объявляет <code>void</code>. <code>static</code> означает вызов без экземпляра класса. Возвращаемое значение стоит проверять отдельно от вывода в консоль.</p><pre><code>public static int square(int x) {
+    return x * x;
+}
+int result = square(4); // 16</code></pre><p>Контракт включает граничные случаи. Для максимума пустого массива можно бросить <code>IllegalArgumentException</code>; для суммы пустого массива естественен ноль.</p>
+<h3>Урок 2. Индексы и обход</h3><p>Индексы массива начинаются с нуля; последний индекс равен <code>array.length - 1</code>. <code>length</code> — поле, без скобок. Для чтения каждого элемента подходит enhanced for:</p><pre><code>int[] values = {3, 5, 8};
+int sum = 0;
+for (int value : values) {
+    sum += value;
+}</code></pre><p>Массив имеет фиксированную длину. Если нужно наращивать количество элементов, позже пригодится <code>ArrayList</code>.</p>
+<h3>Практика</h3><div class="task"><strong>1. Сумма · Легко</strong><p>Напиши метод sum(int[]), возвращающий сумму элементов. Для пустого массива верни 0.</p><p><em>Подсказка:</em> Накопи сумму в переменной, начни с нуля.</p><pre><code>public static int sum(int[] values) {
+    // ...
+}</code></pre></div>
+<div class="task"><strong>2. Статистика · Средне</strong><p>В work/ch03/NumberStats.java реализуй static sum(int[]) и max(int[]). max для пустого массива бросает IllegalArgumentException. Удали TODO.</p><p>Файл: <code>work/ch03/NumberStats.java</code></p><p><em>Подсказка:</em> Начни max с первого элемента, не с нуля: массив может состоять из отрицательных чисел.</p><pre><code>public static int max(int[] values) {
+    // ...
+}</code></pre></div>
+<div class="task"><strong>3. Без сортировки · Сложно</strong><p>Добавь в заметках алгоритм второго по величине <em>различного</em> числа за один проход, без сортировки. Опиши поведение одинаковых элементов.</p><p><em>Подсказка:</em> Храни два кандидата и обновляй их только на нужных сравнениях.</p><pre><code>// Пример: [4, 4, 1] → 1; [4, 4] → нет второго.</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. Последний индекс массива длины 5?</strong></p><ol type="A"><li>5</li><li>4</li><li>6</li></ol>
+<p><strong>2. Как получить количество элементов int[] a?</strong></p><ol type="A"><li>a.length</li><li>a.length()</li><li>a.size()</li></ol>
+<p><strong>3. Почему max нельзя бездумно начинать с 0?</strong></p><ol type="A"><li>Отрицательные элементы дадут неверный результат</li><li>0 нельзя хранить в int</li><li>Метод не скомпилируется</li></ol>
+<p><strong>4. Какое естественное значение sum([])?</strong></p><ol type="A"><li>Исключение всегда</li><li>0</li><li>null</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>B. Индексы начинаются с нуля.</li><li>A. У массива length — поле.</li><li>A. Для [-5, -2] правильный максимум -2.</li><li>B. Ноль — нейтральный элемент для сложения.</li></ol></div></div>
+<p><a href="#ch04">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<div class="chapter" id="ch04"><h2>04 · Объекты и инварианты</h2><p>Классы, конструкторы, поля, инкапсуляция. Время: 65 мин.</p>
+<h3>Цели</h3><ul><li>Создать экземпляр класса</li><li>Защитить состояние через методы</li><li>Различать static и поле объекта</li></ul>
+<h3>Урок 1. Класс и объект</h3><p>Класс описывает данные и действия, объект — конкретный экземпляр. Поля разных объектов независимы; поле с <code>static</code> общее для класса. Конструктор задаёт исходное корректное состояние.</p><pre><code>public class Meter {
+    private int value;
+    public Meter(int start) { value = start; }
+    public int getValue() { return value; }
+}</code></pre><p><code>private</code> скрывает поле от внешнего кода. Внешний код должен пользоваться методами, которые проверяют правила.</p>
+<h3>Урок 2. Инвариант сильнее сеттера</h3><p>Инвариант — условие, верное для объекта после любого публичного вызова. Для банковского счёта баланс не должен становиться отрицательным. Проверяй аргументы <em>до</em> изменения состояния.</p><pre><code>public void deposit(int amount) {
+    if (amount &lt;= 0) throw new IllegalArgumentException();
+    balance += amount;
+}</code></pre><p>Можно использовать наследование для отношений «является», но для просто связанного поведения обычно понятнее композиция. Здесь хватит одного класса с ясными правилами.</p>
+<h3>Практика</h3><div class="task"><strong>1. Два независимых объекта · Легко</strong><p>Создай два Meter, измени один, убедись, что значение второго не изменилось. Объясни отличие от static поля.</p><p><em>Подсказка:</em> Экземпляры хранят собственные поля.</p><pre><code>Meter left = new Meter(1);
+Meter right = new Meter(10);</code></pre></div>
+<div class="task"><strong>2. Счёт без отрицательного баланса · Средне</strong><p>В work/ch04/BankAccount.java реализуй конструктор с начальным балансом &gt;= 0, getBalance(), deposit(int &gt; 0), withdraw(int &gt; 0). При нехватке денег withdraw возвращает false, баланс прежний; при успехе true. Неверные суммы бросают IllegalArgumentException. Удали TODO.</p><p>Файл: <code>work/ch04/BankAccount.java</code></p><p><em>Подсказка:</em> Проверь инвариант после любого метода.</p><pre><code>public class BankAccount {
+    private int balance;
+    // ...
+}</code></pre></div>
+<div class="task"><strong>3. Откажись от опасного API · Сложно</strong><p>Объясни, почему public setBalance(int) ломает модель даже с проверкой на &gt;= 0. Предложи операции предметной области.</p><p><em>Подсказка:</em> Операции должны описывать событие, а не произвольную подмену состояния.</p><pre><code>// Здесь можно записать проект API.</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. Что делает private у поля?</strong></p><ol type="A"><li>Запрещает доступ из чужого класса</li><li>Делает поле общим</li><li>Отключает JVM</li></ol>
+<p><strong>2. Два объекта имеют private int balance. Состояние общее?</strong></p><ol type="A"><li>Да</li><li>Нет</li><li>Только при final</li></ol>
+<p><strong>3. Когда проверять amount перед deposit?</strong></p><ol type="A"><li>После изменения баланса</li><li>До изменения баланса</li><li>Только в IDE</li></ol>
+<p><strong>4. Что означает static поле?</strong></p><ol type="A"><li>Одно поле на класс</li><li>Поле только для конструктора</li><li>Поле только для тестов</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>A. Изменять поле извне можно только через разрешённый API.</li><li>B. Обычные поля принадлежат экземплярам.</li><li>B. Объект не должен остаться в некорректном состоянии.</li><li>A. static хранится на уровне класса.</li></ol></div></div>
+<p><a href="#ch05">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<div class="chapter" id="ch05"><h2>05 · Коллекции и generics</h2><p>List, Map, множество и параметризованные типы. Время: 65 мин.</p>
+<h3>Цели</h3><ul><li>Подобрать коллекцию под задачу</li><li>Считать частоты через Map</li><li>Избежать сырых типов и забытых null</li></ul>
+<h3>Урок 1. Выбирай по операции</h3><p><code>List&lt;String&gt;</code> сохраняет порядок и допускает повторы; <code>Set&lt;String&gt;</code> хранит уникальные значения; <code>Map&lt;String, Integer&gt;</code> связывает ключи со значениями. <code>ArrayList</code>, <code>HashSet</code>, <code>HashMap</code> — распространённые реализации.</p><pre><code>List&lt;String&gt; names = new ArrayList&lt;String&gt;();
+names.add("Ada");
+names.add("Ada"); // повтор допустим</code></pre><p>На Apple Java 6 используй полные параметры типа в <code>new ArrayList&lt;String&gt;()</code>; сокращение <code>&lt;&gt;</code> появилось в Java 7.</p>
+<h3>Урок 2. Счётчик слов</h3><p>У Map отсутствующий ключ возвращает <code>null</code>. Перед прибавлением нужно обработать этот случай. Не полагайся на порядок обхода <code>HashMap</code>.</p><pre><code>Integer count = counts.get(word);
+counts.put(word, count == null ? 1 : count + 1);</code></pre><p>Обобщения ловят ошибки типов при компиляции: <code>List&lt;Integer&gt;</code> не позволит добавить строку. Это полезнее, чем хранить всё как <code>Object</code> и делать приведения.</p>
+<h3>Практика</h3><div class="task"><strong>1. Уникальные теги · Легко</strong><p>Из списка с повторами собери множество тегов. Объясни, почему нельзя рассчитывать на порядок HashSet.</p><p><em>Подсказка:</em> Если нужен порядок вставки, посмотри на LinkedHashSet.</p><pre><code>Set&lt;String&gt; tags = new HashSet&lt;String&gt;();</code></pre></div>
+<div class="task"><strong>2. Частота слов · Средне</strong><p>В work/ch05/Frequency.java реализуй static Map&lt;String,Integer&gt; count(List&lt;String&gt; words). Считай точные строки, пустую строку тоже, не изменяй вход. Удали TODO.</p><p>Файл: <code>work/ch05/Frequency.java</code></p><p><em>Подсказка:</em> Для null ключа Map допускает особый случай, но в этой работе вход содержит только строки.</p><pre><code>Map&lt;String, Integer&gt; result = new HashMap&lt;String, Integer&gt;();</code></pre></div>
+<div class="task"><strong>3. Нормализация · Сложно</strong><p>Предложи отдельный метод нормализации слов без изменения count: trim, lower-case с Locale.ROOT. Какие разные ключи станут одинаковыми?</p><p><em>Подсказка:</em> Раздели ответственность: нормализация до подсчёта.</p><pre><code>// &quot; Java &quot; и &quot;JAVA&quot; → &quot;java&quot;</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. Какая структура допускает повторы и сохраняет порядок?</strong></p><ol type="A"><li>List</li><li>Set</li><li>Map</li></ol>
+<p><strong>2. Что вернёт HashMap.get для отсутствующего ключа?</strong></p><ol type="A"><li>0</li><li>null</li><li>Исключение</li></ol>
+<p><strong>3. Что дают generics?</strong></p><ol type="A"><li>Проверку типов при компиляции</li><li>Быстрее CPU</li><li>Автоматическую сортировку</li></ol>
+<p><strong>4. Можно ли полагаться на порядок HashMap?</strong></p><ol type="A"><li>Да, всегда</li><li>Нет</li><li>Только на Windows</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>A. List индексируется и хранит повторы.</li><li>B. Отсутствие значения нужно обработать отдельно.</li><li>A. Тип элементов становится частью контракта API.</li><li>B. Порядок HashMap не является контрактом.</li></ol></div></div>
+<p><a href="#ch06">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<div class="chapter" id="ch06"><h2>06 · Ошибки и файлы</h2><p>Исключения, ресурсы, кодировки и ввод-вывод. Время: 70 мин.</p>
+<h3>Цели</h3><ul><li>Отличать ожидаемую ошибку от бага</li><li>Закрывать файлы безопасно</li><li>Обрабатывать неверные строки с номером</li></ul>
+<h3>Урок 1. Исключения без паники</h3><p><code>IllegalArgumentException</code> сообщает о неверном аргументе; <code>IOException</code> — о сбое ввода-вывода. Не глуши ошибки пустым <code>catch</code>: потеряешь причину. Если можешь восстановиться — обработай, иначе добавь контекст и передай выше.</p><pre><code>try {
+    int value = Integer.parseInt(line.trim());
+} catch (NumberFormatException e) {
+    throw new IllegalArgumentException("Неверная строка", e);
+}</code></pre><p>Сообщение должно помочь найти вход, который не удалось разобрать.</p>
+<h3>Урок 2. Файл и кодировка</h3><p>Читай текст с явно указанной UTF-8 кодировкой. <code>try-with-resources</code> автоматически закроет открытый поток даже при исключении; конструкция появилась в Java 7.</p><pre><code>try (BufferedReader reader = Files.newBufferedReader(
+        path, StandardCharsets.UTF_8)) {
+    String line;
+    while ((line = reader.readLine()) != null) {
+        // обработка
+    }
+}</code></pre><p>На старой Mac OS X 10.6 с Java 6 такую работу можно писать на новой машине и проверять в CI. Не путай ошибку чтения файла с неверным числом внутри успешно прочитанного файла.</p>
+<h3>Практика</h3><div class="task"><strong>1. Разбери ошибку · Легко</strong><p>Преврати строку в int и поймай только NumberFormatException. Выведи осмысленное сообщение.</p><p><em>Подсказка:</em> Не лови Exception без причины.</p><pre><code>try { Integer.parseInt(&quot;x&quot;); } catch (NumberFormatException e) { /* ... */ }</code></pre></div>
+<div class="task"><strong>2. Числа из файла · Средне</strong><p>В work/ch06/SafeNumbers.java реализуй static List&lt;Integer&gt; read(Path file) throws IOException: читать UTF-8, пустые/пробельные строки пропускать, числа trim; при нечисловой строке бросать IllegalArgumentException с номером строки (с 1). Удали TODO.</p><p>Файл: <code>work/ch06/SafeNumbers.java</code></p><p><em>Подсказка:</em> readLine + счётчик, не теряй исходную причину ошибки.</p><pre><code>public static List&lt;Integer&gt; read(Path file) throws IOException {
+    // try-with-resources
+}</code></pre></div>
+<div class="task"><strong>3. Атомарная запись · Сложно</strong><p>Набросай план, как записывать файл через временный путь и rename, чтобы не терять старую версию при сбое.</p><p><em>Подсказка:</em> Подумай, что будет, если процесс упадёт в середине записи.</p><pre><code>// Временный файл → flush/close → перемещение.</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. Какое исключение подходит для неверного аргумента метода?</strong></p><ol type="A"><li>IllegalArgumentException</li><li>IOException</li><li>ThreadDeath</li></ol>
+<p><strong>2. Что закрывает ресурс даже при исключении?</strong></p><ol type="A"><li>try-with-resources</li><li>if/else</li><li>System.out</li></ol>
+<p><strong>3. Чем задавать кодировку файла?</strong></p><ol type="A"><li>Явным StandardCharsets.UTF_8</li><li>Расширением .txt</li><li>Часовым поясом</li></ol>
+<p><strong>4. Пустой catch (Exception e) {} — нормальная обработка?</strong></p><ol type="A"><li>Да</li><li>Нет</li><li>Только для CSV</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>A. Это ошибка контракта вызова.</li><li>A. После блока ресурс автоматически закрывается.</li><li>A. Системная кодировка зависит от машины.</li><li>B. Он скрывает сбой и усложняет диагностику.</li></ol></div></div>
+<p><a href="#ch07">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<div class="chapter" id="ch07"><h2>07 · Сборка и тесты</h2><p>Структура проекта, Maven, проверка поведения и CI. Время: 65 мин.</p>
+<h3>Цели</h3><ul><li>Понять цель сборщика</li><li>Написать граничные тесты</li><li>Читать результат GitHub Actions</li></ul>
+<h3>Урок 1. Один запуск вместо десяти команд</h3><p>В этом учебном репозитории скрипт компилирует решения и запускает проверки без сторонних зависимостей. В больших Java-проектах Maven или Gradle управляют зависимостями, тестами и сборкой. Maven обычно использует <code>pom.xml</code> и каталоги <code>src/main/java</code>, <code>src/test/java</code>.</p><pre><code>mvn test
+mvn package</code></pre><p>Коммит не гарантирует корректности кода. При push GitHub Actions запускает ту же проверку; неготовые файлы с <code>// TODO</code> помечаются как ожидающие, а готовые проходят реальные тесты.</p>
+<h3>Урок 2. Тестируй контракт, а не строку реализации</h3><p>Проверяй ожидаемый результат, крайние случаи и ошибки. Например, для slug нужны пустая строка, пробелы, повторные дефисы, верхний регистр. Тест не должен утверждать, какой цикл ты использовал внутри метода.</p><pre><code>// идея для теста
+assertEquals("hello-world", slug("  HELLO   world  "));
+assertEquals("", slug("!!"));</code></pre><p>Если CI красный, открой вкладку Actions → конкретный запуск → шаг с ошибкой. Важно отличить ошибку компиляции, упавшее утверждение и сбой самой инфраструктуры.</p>
+<h3>Практика</h3><div class="task"><strong>1. Красный → зелёный · Легко</strong><p>Испорти локально одно правило решения из прошлой главы, запусти проверку, прочитай конкретный провал, верни правильное решение.</p><p><em>Подсказка:</em> Проверка должна падать по понятной причине, а после исправления проходить.</p><pre><code>bash scripts/check.sh</code></pre></div>
+<div class="task"><strong>2. Нормализатор slug · Средне</strong><p>В work/ch07/SlugService.java реализуй static String slug(String raw): trim, ASCII буквы в нижний регистр, цифры сохранить, любое подряд идущее сочетание остальных символов заменить одним дефисом; убрать крайние дефисы. null → IllegalArgumentException. Удали TODO.</p><p>Файл: <code>work/ch07/SlugService.java</code></p><p><em>Подсказка:</em> Используй StringBuilder и флаг предыдущего разделителя.</p><pre><code>slug(&quot;  Hi,  Java  8! &quot;) → &quot;hi-java-8&quot;</code></pre></div>
+<div class="task"><strong>3. Добавь свой тест · Сложно</strong><p>В личной ветке добавь в tests/Verifier.java ещё один нетривиальный крайний случай для slug и приложи в commit объяснение, какую ошибку он ловит.</p><p><em>Подсказка:</em> Тест должен проверять контракт, а не реализацию.</p><pre><code>// Например последовательность символов не ASCII.</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. Где обычно лежит Maven POM?</strong></p><ol type="A"><li>pom.xml</li><li>main.class</li><li>package-lock.json</li></ol>
+<p><strong>2. Что лучше тестировать у slug?</strong></p><ol type="A"><li>Внутренний цикл</li><li>Результат для пробелов и знаков</li><li>Имя переменной</li></ol>
+<p><strong>3. Где искать причины упавшей проверки в GitHub?</strong></p><ol type="A"><li>Actions → запуск → упавший шаг</li><li>Только Settings</li><li>Список аватаров</li></ol>
+<p><strong>4. Означает ли успешный git push, что программа верна?</strong></p><ol type="A"><li>Да</li><li>Нет</li><li>Только на macOS</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>A. POM описывает Maven-проект.</li><li>B. Проверка поведения допускает разные реализации.</li><li>A. Лог содержит компилятор и проваленное утверждение.</li><li>B. Push сохраняет изменения, CI отдельно проверяет их.</li></ol></div></div>
+<p><a href="#ch08">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<div class="chapter" id="ch08"><h2>08 · Функции и Stream API</h2><p>Лямбды, map, filter, distinct и порядок операций. Время: 65 мин.</p>
+<h3>Цели</h3><ul><li>Читать лямбда-выражения</li><li>Строить последовательную обработку</li><li>Не менять входную коллекцию</li></ul>
+<h3>Урок 1. Функция как аргумент</h3><p>Лямбда <code>x -&gt; x.trim()</code> — компактная реализация функционального интерфейса. В Stream pipeline операции описывают преобразование последовательности; терминальная операция материализует результат.</p><pre><code>List&lt;String&gt; clean = raw.stream()
+    .map(String::trim)
+    .filter(s -&gt; !s.isEmpty())
+    .collect(Collectors.toList());</code></pre><p>Stream API и лямбды появились в Java 8. На Java 6/7 эту главу можно читать, но компилировать решение нужно на JDK 8+.</p>
+<h3>Урок 2. Порядок операций важен</h3><p>Сначала убирай пробелы, затем приводи к нижнему регистру с <code>Locale.ROOT</code>, удаляй пустые значения, затем <code>distinct()</code> и <code>sorted()</code>. Если применить distinct до нормализации, <code>" Java "</code> и <code>"JAVA"</code> останутся разными.</p><p>Не меняй исходный список внутри цепочки. Побочные эффекты в <code>map</code> усложняют тестирование. Когда простой цикл яснее, он остаётся хорошим решением.</p>
+<h3>Практика</h3><div class="task"><strong>1. Конвейер чисел · Легко</strong><p>Из списка чисел получи квадраты только чётных и собери их в новый список.</p><p><em>Подсказка:</em> Порядок filter и map влияет на смысл.</p><pre><code>numbers.stream().filter(...).map(...).collect(...);</code></pre></div>
+<div class="task"><strong>2. Нормализация меток · Средне</strong><p>В work/ch08/TagPipeline.java реализуй static List&lt;String&gt; normalize(List&lt;String&gt; input): trim, lower-case с Locale.ROOT, убрать пустые, distinct, сортировка по естественному порядку. Вход не менять. Удали TODO.</p><p>Файл: <code>work/ch08/TagPipeline.java</code></p><p><em>Подсказка:</em> Применяй distinct после приведения регистра.</p><pre><code>input.stream().map(...).filter(...).distinct().sorted().collect(...);</code></pre></div>
+<div class="task"><strong>3. Оценка стоимости · Сложно</strong><p>Для миллиона элементов сравни по смыслу читаемость и количество промежуточных объектов у stream и обычного цикла. Выбери версию и объясни.</p><p><em>Подсказка:</em> Не делай вывод по одному запуску JVM.</p><pre><code>// Замерь обе реализации на собственной машине, сохрани параметры опыта.</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. В какой Java появились Stream API и лямбды?</strong></p><ol type="A"><li>6</li><li>7</li><li>8</li></ol>
+<p><strong>2. Что делает filter?</strong></p><ol type="A"><li>Оставляет подходящие элементы</li><li>Сортирует</li><li>Печатает список</li></ol>
+<p><strong>3. Что сделать до distinct для строк с разным регистром?</strong></p><ol type="A"><li>Нормализовать регистр</li><li>Вызвать System.gc</li><li>Удалить исходник</li></ol>
+<p><strong>4. Влияет ли collect на исходный список?</strong></p><ol type="A"><li>Обязательно меняет</li><li>Создаёт результат, если операции не мутируют вход</li><li>Всегда удаляет дубли</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>C. Эта глава требует Java 8 или новее.</li><li>A. Предикат решает, оставить ли элемент.</li><li>A. Иначе строки не считаются равными.</li><li>B. Для обычных map/filter новый список собирается отдельно.</li></ol></div></div>
+<p><a href="#ch09">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<div class="chapter" id="ch09"><h2>09 · Потоки и задачи</h2><p>Разделение работы, гонки данных и завершение ExecutorService. Время: 75 мин.</p>
+<h3>Цели</h3><ul><li>Увидеть гонку на общем счётчике</li><li>Собрать независимые результаты</li><li>Всегда завершать executor</li></ul>
+<h3>Урок 1. Конкурентность не равна ускорению</h3><p>Несколько потоков могут выполняться вперемешку. Операция <code>counter++</code> не атомарна: чтение, увеличение и запись могут пересечься. Локальные суммы по независимым частям массива не требуют общего изменяемого счётчика.</p><pre><code>ExecutorService pool = Executors.newFixedThreadPool(2);
+try {
+    Future&lt;Long&gt; left = pool.submit(() -&gt; 42L);
+    System.out.println(left.get());
+} finally {
+    pool.shutdown();
+}</code></pre><p>Потоки создают накладные расходы; для малого массива последовательный цикл обычно проще и быстрее.</p>
+<h3>Урок 2. Будь честен с ошибками</h3><p><code>Future.get()</code> ждёт результат и передаёт сбой задачи через <code>ExecutionException</code>. Если поток прерван, сохрани флаг прерывания, если решил перехватить <code>InterruptedException</code>. Не оставляй executor жить после завершения программы.</p><p>Разбей данные на части, считай локально и сложи <code>long</code>-результаты. <code>int</code> может переполниться ещё до преобразования в <code>long</code>, поэтому аккумулятор с самого начала должен быть <code>long</code>.</p>
+<h3>Практика</h3><div class="task"><strong>1. Гонка на счётчике · Легко</strong><p>Запусти две задачи, которые увеличивают общий int. Почему итог иногда меньше ожидаемого? Не исправляй sleep().</p><p><em>Подсказка:</em> Дальше используй локальные результаты или атомики.</p><pre><code>// counter++ состоит из нескольких действий.</code></pre></div>
+<div class="task"><strong>2. Сумма параллельно · Средне</strong><p>В work/ch09/ParallelSum.java реализуй static long sum(int[] values, int workers) throws InterruptedException, ExecutionException: workers &lt;= 0 → IllegalArgumentException; раздели массив на не более workers задач, собирай локальные long-суммы через ExecutorService и Future; закрывай executor. Удали TODO.</p><p>Файл: <code>work/ch09/ParallelSum.java</code></p><p><em>Подсказка:</em> Обрабатывай пустой массив отдельно: результат 0, не создавай задачи с пустым диапазоном.</p><pre><code>ExecutorService pool = Executors.newFixedThreadPool(workers);</code></pre></div>
+<div class="task"><strong>3. Ускорение или overhead · Сложно</strong><p>Сравни время последовательной и параллельной суммы на 100 и 10 000 000 чисел, прогрей JVM, запиши workers и железо. Объясни результат.</p><p><em>Подсказка:</em> Создание задач дорого относительно короткого цикла.</p><pre><code>// Параметры эксперимента и замеры.</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. Потокобезопасен ли counter++ для общего int?</strong></p><ol type="A"><li>Да</li><li>Нет</li><li>Только в main</li></ol>
+<p><strong>2. Зачем Future.get()?</strong></p><ol type="A"><li>Получить результат задачи и дождаться её</li><li>Закрыть файл</li><li>Собрать JAR</li></ol>
+<p><strong>3. Что делать с ExecutorService после работы?</strong></p><ol type="A"><li>shutdown()</li><li>Ничего</li><li>Удалить исходник</li></ol>
+<p><strong>4. Какую переменную взять для суммы многих int?</strong></p><ol type="A"><li>boolean</li><li>long</li><li>char</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>B. Операция состоит из чтения и записи.</li><li>A. get ждёт и сообщает об ошибках задачи.</li><li>A. Потоки пула иначе могут не завершиться.</li><li>B. long снижает риск переполнения суммы int.</li></ol></div></div>
+<p><a href="#ch10">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<div class="chapter" id="ch10"><h2>10 · HTTP и данные</h2><p>URL, кодирование параметров и граница между строкой и протоколом. Время: 75 мин.</p>
+<h3>Цели</h3><ul><li>Кодировать query-параметры</li><li>Отличать сетевую ошибку от HTTP-ответа</li><li>Понимать назначение JSON</li></ul>
+<h3>Урок 1. URL нельзя собирать простым плюсом</h3><p>Строка <code>q=hello world</code> не является корректно закодированным query-параметром. <code>URLEncoder.encode(value, "UTF-8")</code> превращает пробел в <code>+</code> для form/query encoding, символ <code>&amp;</code> — в <code>%26</code>. Каждый ключ и значение кодируются по отдельности.</p><pre><code>String query = "q=" + URLEncoder.encode("a &amp; b", "UTF-8");
+// q=a+%26+b</code></pre><p>Не кодируй целый URL целиком: слеши, двоеточие и знаки вопроса имеют структурную роль.</p>
+<h3>Урок 2. Слои ошибки и JSON</h3><p>HTTP-ответ <code>404</code> означает, что сервер ответил, но не нашёл ресурс. Таймаут или сбой DNS означают, что ожидаемого HTTP-ответа вообще не было. JSON описывает данные: объект, массив, строка, число, boolean, null; он не равен Java-объекту сам по себе.</p><p>На реальном проекте используй проверенную библиотеку JSON, а сетевые вызовы делай с таймаутами и обработкой статуса. В этом задании кодируется только query-строка; сеть не требуется, поэтому проверка воспроизводима в CI.</p>
+<h3>Практика</h3><div class="task"><strong>1. Пробел и амперсанд · Легко</strong><p>Вычисли кодировку значений &quot;a b&quot; и &quot;a&amp;b&quot; через URLEncoder. Почему результат второй строки не разрушит границы параметров?</p><p><em>Подсказка:</em> Амперсанд внутри значения станет %26.</p><pre><code>URLEncoder.encode(value, &quot;UTF-8&quot;)</code></pre></div>
+<div class="task"><strong>2. Детерминированный query · Средне</strong><p>В work/ch10/QueryString.java реализуй static String encode(Map&lt;String,String&gt; params): сортируй ключи лексикографически; каждый ключ/значение URL-кодируй UTF-8; соединяй k=v через &amp;. Пустая Map → пустая строка. null ключ или значение → IllegalArgumentException. Удали TODO.</p><p>Файл: <code>work/ch10/QueryString.java</code></p><p><em>Подсказка:</em> TreeMap поможет с порядком; не кодируй разделители.</p><pre><code>// {&quot;q&quot;: &quot;a b&quot;, &quot;x&quot;: &quot;&amp;&quot;} → &quot;q=a+b&amp;x=%26&quot;</code></pre></div>
+<div class="task"><strong>3. HTTP контракт · Сложно</strong><p>Опиши структуру клиента: таймаут подключения/чтения, статус, повтор запроса только для безопасной операции, JSON-парсер. Не отправляй реальные токены в этот репозиторий.</p><p><em>Подсказка:</em> Отдели транспортный сбой от ответа 4xx/5xx.</p><pre><code>// Схема вызова и обработки ошибок.</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. Как кодировать query-строку?</strong></p><ol type="A"><li>Каждый ключ и значение отдельно</li><li>Весь URL через URLEncoder</li><li>Никак</li></ol>
+<p><strong>2. Что означает HTTP 404?</strong></p><ol type="A"><li>Сервер ответил, ресурс не найден</li><li>DNS не ответил</li><li>Компилятор сломался</li></ol>
+<p><strong>3. Что такое JSON?</strong></p><ol type="A"><li>Формат данных</li><li>Формат байткода JVM</li><li>Версия JDK</li></ol>
+<p><strong>4. Зачем фиксировать порядок параметров в задании?</strong></p><ol type="A"><li>Чтобы результат воспроизводился</li><li>Чтобы ускорить интернет</li><li>Чтобы включить SSL</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>A. Разделители структуры не должны превращаться в данные.</li><li>A. Статус приходит в HTTP-ответе.</li><li>A. JSON описывает данные независимо от языка.</li><li>A. Map не всегда гарантирует порядок обхода.</li></ol></div></div>
+<p><a href="#ch11">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<div class="chapter" id="ch11"><h2>11 · Финальный проект</h2><p>Консольный список задач с файлами, тестами и Git-историей. Время: 2–4 часа.</p>
+<h3>Цели</h3><ul><li>Собрать несколько тем в одной программе</li><li>Сохранить данные между запусками</li><li>Показать результат в репозитории</li></ul>
+<h3>Урок 1. Проектируй контракт CLI</h3><p>Программа получает путь файла и команду: <code>add</code>, <code>list</code>, <code>done</code>. Сначала определи формат строк и поведение для ошибочных аргументов. Сохраняй простые задачи как <code>id|done|text</code>, где в тексте символы <code>|</code> и перевод строки запрещены. При <code>list</code> порядок — по ID.</p><pre><code>java TodoCli tasks.txt add "Прочитать главу 11"
+java TodoCli tasks.txt list
+java TodoCli tasks.txt done 1</code></pre><p>Не храни свои решения внутри <code>docs/</code>: GitHub Pages публичен. В <code>work/</code> тоже не добавляй пароли, личные данные или реальные токены.</p>
+<h3>Урок 2. Определи готовность</h3><p>Тестируй полный цикл: пустой список, добавление двух задач, отметка первой выполненной, повторный запуск с тем же файлом и устойчивый результат. CI создаёт временный файл и выполняет команды в отдельных процессах JVM.</p><p>Пиши короткие коммиты после работающих этапов: сначала формат и <code>list</code>, затем <code>add</code>, потом <code>done</code>, наконец документация. В README укажи команды запуска, соглашения и известные ограничения.</p>
+<h3>Практика</h3><div class="task"><strong>1. Формат и пример · Легко</strong><p>Нарисуй три строки файла задач, укажи ID, флаг done и текст. Сформулируй правила для недопустимых символов.</p><p><em>Подсказка:</em> Одна задача — одна строка; ID не переиспользуется.</p><pre><code>1|false|Первая задача
+2|true|Готово</code></pre></div>
+<div class="task"><strong>2. Todo CLI · Средне</strong><p>В work/ch11/TodoCli.java реализуй команды <code>list</code>, <code>add text</code>, <code>done id</code> с файлом UTF-8: <code>java TodoCli FILE COMMAND [ARG]</code>. Если файла нет, list пуст и add создаёт его. Вывод list: <code>ID [ ] text</code> или <code>ID [x] text</code>. Ошибки аргументов → stderr + ненулевой exit code. Удали TODO.</p><p>Файл: <code>work/ch11/TodoCli.java</code></p><p><em>Подсказка:</em> Раздели parse/save/commands; при изменении перезаписывай файл после успешной проверки.</p><pre><code>java TodoCli tasks.txt add &quot;Read Java&quot;
+java TodoCli tasks.txt done 1
+java TodoCli tasks.txt list</code></pre></div>
+<div class="task"><strong>3. Защита проекта · Сложно</strong><p>В results/ch11/README.md опиши архитектуру, три граничных случая, команды воспроизведения и то, что улучшил бы дальше. Коммить результаты этапами.</p><p><em>Подсказка:</em> Проверь решение на новом пустом файле, не только на своём.</p><pre><code>// Можно приложить скриншот терминала в results/ch11/.</code></pre></div>
+<div class="exam"><h3>Мини-экзамен · 3 из 4 для зачёта</h3><p><strong>1. Как проверить, что сохранение работает между запусками?</strong></p><ol type="A"><li>Запустить add и list в разных JVM-процессах</li><li>Вызвать list дважды в одном методе</li><li>Проверить только длину файла</li></ol>
+<p><strong>2. Куда писать диагностику неверной команды?</strong></p><ol type="A"><li>stderr и ненулевой код завершения</li><li>Только stdout как успешный результат</li><li>В Git history</li></ol>
+<p><strong>3. Что делать с токенами и паролями в решении?</strong></p><ol type="A"><li>Не коммитить</li><li>Хранить в docs/</li><li>Указывать в commit message</li></ol>
+<p><strong>4. Какая последовательность разработки удобна для ревью?</strong></p><ol type="A"><li>Малые рабочие коммиты по этапам</li><li>Один коммит после всего проекта</li><li>Удалить историю</li></ol>
+<div class="answers"><strong>Ключ для самопроверки:</strong><ol><li>A. Отдельные запуски проверяют реальное сохранение.</li><li>A. CLI должен отделять данные от ошибок.</li><li>A. Репозиторий и Pages могут быть публичными.</li><li>A. Этапы делают прогресс и ошибки понятными.</li></ol></div></div>
+<p><a href="#ch00">Следующая глава →</a> · <a href="#top">К началу</a></p></div>
+<p>Готово. Файл сгенерирован из того же содержания, что и интерактивный курс.</p></div></body></html>

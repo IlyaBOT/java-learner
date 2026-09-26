@@ -20,6 +20,8 @@ jobs:
           node-version: '22'
       - name: Проверить структуру курса и экзамены
         run: npm test
+      - name: Проверить офлайн-версию для старых браузеров
+        run: node scripts/build-legacy.mjs --check
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
