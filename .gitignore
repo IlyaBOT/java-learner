@@ -1,0 +1,8 @@
+*.class
+target/
+.gradle/
+.idea/
+.vscode/
+.DS_Store
+tasks.txt
+node_modules/
